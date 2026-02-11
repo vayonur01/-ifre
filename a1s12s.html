@@ -7,36 +7,42 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 50px;
+            margin-top: 60px;
         }
         .code-box {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
-            padding: 20px;
-            border: 2px solid #333;
+            padding: 25px;
+            border: 3px solid #222;
             display: inline-block;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
 
-    <div class="code-box" id="codeDisplay">Kod yükleniyor...</div>
+<div class="code-box" id="codeDisplay">Kod yükleniyor...</div>
 
-    <script>
-        function getParam(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
+<script>
 
-        const code = getParam("code");
-        const display = document.getElementById("codeDisplay");
+function getCode() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("code");
+}
 
-        if (code) {
-            display.textContent = code;
-        } else {
-            display.textContent = "Kod bulunamadı!";
-        }
-    </script>
+const code = getCode();
+const display = document.getElementById("codeDisplay");
+
+// 9 karakter kontrolü (harf + sayı)
+const regex = /^[A-Za-z0-9]{9}$/;
+
+if(code && regex.test(code)){
+    display.textContent = code;
+}else{
+    display.textContent = "Geçersiz kod!";
+}
+
+</script>
 
 </body>
 </html>
