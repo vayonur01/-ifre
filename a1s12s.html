@@ -1,60 +1,42 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>Link Çekici</title>
-<style>
-    body{ font-family: Arial; padding: 30px; }
-    button{ padding: 10px 20px; font-size: 16px; cursor: pointer; }
-    a{ display: block; margin: 6px 0; color: #0066cc; }
-</style>
+    <meta charset="UTF-8">
+    <title>Kod Yönlendirme</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .code-box {
+            font-size: 2rem;
+            font-weight: bold;
+            padding: 20px;
+            border: 2px solid #333;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
 
-<h2>Verilen Sitedeki (2) Olanlar</h2>
+    <div class="code-box" id="codeDisplay">Kod yükleniyor...</div>
 
-<button onclick="cek()">Çek & Oluştur</button>
-
-<div id="show"></div>
-
-<script>
-
-const url = "https://vayonur01.github.io/-ifre/";
-const proxy = "https://api.allorigins.win/raw?url=";
-
-async function cek(){
-    document.getElementById("show").innerHTML = "Yükleniyor...";
-
-    try{
-        const response = await fetch(proxy + encodeURIComponent(url));
-        const text = await response.text();
-
-        // (2) ile biten kelimeleri bul
-        const matches = text.match(/[^\s]+\(\d+\)/g); 
-
-        if(!matches || matches.length === 0){
-            document.getElementById("show").innerHTML = "Hiç veri bulunamadı.";
-            return;
+    <script>
+        function getParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
         }
 
-        let html = "";
-        matches.forEach(item => {
+        const code = getParam("code");
+        const display = document.getElementById("codeDisplay");
 
-            const rand = Math.floor(1000 + Math.random()*9000);
-
-            const newLink = url + "&" + rand + "(2)";
-
-            html += `<a href="${newLink}" target="_blank">${newLink}</a>`;
-        });
-
-        document.getElementById("show").innerHTML = html;
-
-    }catch(err){
-        document.getElementById("show").innerHTML = "CORS veya yükleme hatası.";
-    }
-}
-
-</script>
+        if (code) {
+            display.textContent = code;
+        } else {
+            display.textContent = "Kod bulunamadı!";
+        }
+    </script>
 
 </body>
 </html>
