@@ -1,46 +1,59 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <title>Kod Yönlendirme</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 60px;
-        }
-        .code-box {
-            font-size: 2.2rem;
-            font-weight: bold;
-            padding: 25px;
-            border: 3px solid #222;
-            display: inline-block;
-            border-radius: 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Kod</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:Arial;
+}
+.box{
+    font-size:40px;
+    font-weight:bold;
+    border:3px solid black;
+    padding:30px;
+    border-radius:10px;
+}
+</style>
 </head>
 <body>
 
-<div class="code-box" id="codeDisplay">Kod yükleniyor...</div>
+<div class="box" id="code">Kontrol ediliyor...</div>
 
 <script>
 
-function getCode() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("code");
+async function kontrolEt(){
+
+    // Kodun geleceği URL
+    const response = await fetch("https://vayonur01.github.io/-ifre/");
+    const text = await response.text();
+
+    // URL'den kod al
+    const code = location.hash.substring(1); 
+    // örnek: yonlendirme.html#A1B2C3D4
+
+    if(!code){
+        document.getElementById("code").textContent = "Kod yok";
+        return;
+    }
+
+    // Sayfa içinde bu kod + (2) var mı diye bak
+    const aranacak = code + "(2)";
+
+    if(text.includes(aranacak)){
+        document.getElementById("code").textContent = code;
+    }else{
+        document.getElementById("code").textContent = "Kod bulunamadı";
+    }
 }
 
-const code = getCode();
-const display = document.getElementById("codeDisplay");
-
-// 9 karakter kontrolü (harf + sayı)
-const regex = /^[A-Za-z0-9]{9}$/;
-
-if(code && regex.test(code)){
-    display.textContent = code;
-}else{
-    display.textContent = "Geçersiz kod!";
-}
+kontrolEt();
 
 </script>
 
