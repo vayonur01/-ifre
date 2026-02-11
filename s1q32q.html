@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Yönlendiriliyor...</title>
+</head>
+<body>
+
+<script>
+
+async function rastgeleYonlendir(){
+
+try{
+
+// kodların olduğu sayfayı çek
+const res = await fetch("/-ifre/");
+const text = await res.text();
+
+// A1B2C3D4(2) formatındaki kodları bul
+const matches = [...text.matchAll(/([A-Z0-9]{8})\(2\)/g)];
+
+if(matches.length === 0){
+    document.body.innerHTML = "Uygun kod bulunamadı.";
+    return;
+}
+
+// rastgele seç
+const randomCode = matches[Math.floor(Math.random() * matches.length)][1];
+
+// yönlendir
+window.location.href = "a1s12s.html#" + randomCode;
+
+}catch{
+    document.body.innerHTML = "Kod listesi çekilemedi.";
+}
+
+}
+
+rastgeleYonlendir();
+
+</script>
+
+</body>
+</html>
