@@ -6,19 +6,18 @@
 
 <style>
 body{
-    margin:0;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-family:Arial;
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:Arial;
 }
 .box{
-    font-size:40px;
-    font-weight:bold;
-    border:3px solid black;
-    padding:30px;
-    border-radius:10px;
+font-size:42px;
+border:3px solid black;
+padding:30px;
+border-radius:10px;
 }
 </style>
 </head>
@@ -30,27 +29,38 @@ body{
 
 async function kontrolEt(){
 
-    // Kodun geleceği URL
-    const response = await fetch("https://vayonur01.github.io/-ifre/");
-    const text = await response.text();
+const el = document.getElementById("code");
 
-    // URL'den kod al
-    const code = location.hash.substring(1); 
-    // örnek: yonlendirme.html#A1B2C3D4
+// URL'den kodu al
+// ÖRNEK:
+// a1s12s.html#A1B2C3D4
+let code = location.hash.replace("#","").trim().toUpperCase();
 
-    if(!code){
-        document.getElementById("code").textContent = "Kod yok";
-        return;
-    }
+if(!code){
+    el.textContent = "Kod yok";
+    return;
+}
 
-    // Sayfa içinde bu kod + (2) var mı diye bak
-    const aranacak = code + "(2)";
+try{
 
-    if(text.includes(aranacak)){
-        document.getElementById("code").textContent = code;
-    }else{
-        document.getElementById("code").textContent = "Kod bulunamadı";
-    }
+// kodların olduğu sayfayı çek
+const res = await fetch("/-ifre/");
+const text = await res.text();
+
+// boşlukları kaldır (çok önemli)
+const temiz = text.replace(/\s+/g,'');
+
+// kod var mı bak
+if(temiz.includes(code + "(2)")){
+    el.textContent = code;
+}else{
+    el.textContent = "Kod bulunamadı";
+}
+
+}catch{
+    el.textContent = "Kod listesi çekilemedi";
+}
+
 }
 
 kontrolEt();
